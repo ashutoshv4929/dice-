@@ -161,26 +161,6 @@ header h1 {
     font-size: 0.9rem;
     font-weight: 600;
     margin-top: 0px;
-    @font-face {
-    font-family: 'Poppins';
-    src: url('../fonts/Poppins-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Poppins';
-    src: url('../fonts/Poppins-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Poppins';
-    src: url('../fonts/Poppins-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-}
 }
 
 .dice-history {
@@ -270,12 +250,23 @@ header h1 {
     width: var(--dice-size);
     height: var(--dice-size);
     transform-style: preserve-3d;
-    transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    /* This transition applies to the final snap after 'rolling' class is removed */
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #dice-cube.rolling {
-    transition-timing-function: cubic-bezier(.17,.89,.56,1.49);
+    /* This animation defines the actual 'rolling' effect duration */
+    animation: roll-animation 1.5s cubic-bezier(.17,.89,.56,1.49) forwards;
+    /* Ensure no other transition interferes while rolling */
+    transition: none; 
 }
+
+/* Add the @keyframes for roll-animation, if not already defined */
+@keyframes roll-animation {
+    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    100% { transform: rotateX(720deg) rotateY(720deg) rotateZ(360deg); }
+}
+
 
 .face {
     position: absolute;
@@ -355,8 +346,7 @@ header h1 {
 .face[data-face="6"] .pip { align-self: initial; justify-self: initial; } /* Reset */
 
 
-/* 
-  Front: 1, Back: 2, Right: 3, Left: 4, Top: 6, Bottom: 5
+/* Front: 1, Back: 2, Right: 3, Left: 4, Top: 6, Bottom: 5
   This mapping is common. Standard dice opposite faces sum to 7.
 */
 .face.front  { transform: rotateY(0deg) translateZ(calc(var(--dice-size) / 2)); }
